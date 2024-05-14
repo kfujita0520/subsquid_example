@@ -36,8 +36,7 @@ sqd serve
 Change graph query schema on `schema.graphql` by referring following repository.
 https://github.com/subsquid/astar-erc-tokens/
 
-Create necessary entity classes under src/model/generated folder by running `sqd codegen`
-command.
+Create necessary entity classes under src/model/generated folder by running `sqd codegen` command.
 
 ### 2. Import ABI contract and generate interfaces to decode events
 
@@ -46,6 +45,16 @@ Generate a type-safe facade class to decode EVM log under ./src/abi folder by ex
 
 ### 3. Change processor and main script
 
-Change network configration to Polygon
+Change network configration to Polygon in .env and processor.js
 
 
+### 4. Copy mapping logic from exising repository
+
+### 5 regenerate db schema migration files
+```bash
+rm -r db/migrations
+npx squid-typeorm-migration generate
+```
+
+## Reference 
+https://docs.subsquid.io/sdk/how-to-start/squid-development/
