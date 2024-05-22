@@ -49,6 +49,8 @@ Change network configration to Polygon in .env and processor.js
 
 
 ### 4. Copy mapping logic from exising repository
+Copy common and mappings folder from AstarIndex Repository
+
 
 ### 5 regenerate db schema migration files
 ```bash
