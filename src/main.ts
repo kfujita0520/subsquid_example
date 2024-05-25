@@ -22,7 +22,7 @@ processor.run(new TypeormDatabaseWithCache({supportHotBlocks: true}), async ctx 
                         handleErc721Transfer(mctx, log)
                     }
                     else if (log.topics.length === 3) { // likely ERC20
-                        handleErc20Transfer(mctx, log)
+                        // handleErc20Transfer(mctx, log)
                     }
                     else {
                         ctx.log.info(`Skipping a Transfer(address,address,uint256) event from ${log.address} not recognized as ERC20 or ERC721. Txn ${log.transactionHash}`)
