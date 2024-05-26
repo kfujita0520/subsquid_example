@@ -13,14 +13,14 @@ import * as erc20 from './abi/erc20'
 assert(erc20.events.Transfer.topic===erc721.events.Transfer.topic, 'ERC20 and ERC721 topics are expected to be the same in the TS ABI and they are not')
 
 export const processor = new EvmBatchProcessor()
-    .setGateway('https://v2.archive.subsquid.io/network/moonriver-mainnet')
+    .setGateway('https://v2.archive.subsquid.io/network/polygon-mainnet')
     .setRpcEndpoint({
-        url: 'https://moonriver-rpc.dwellir.com',
+        url: 'https://rpc.ankr.com/polygon',
         rateLimit: 50 // requests per second
     })
     // most networks will need a higher value here
     // e.g. Polygon needs at least 400 blocks to finality
-    .setFinalityConfirmation(5)
+    .setFinalityConfirmation(400)
     .setFields({
         log: {
             address: true,
@@ -29,6 +29,10 @@ export const processor = new EvmBatchProcessor()
             transactionHash: true,
         },
     })
+    // .setBlockRange({
+    //     from: 43_817_299,
+    //     //to: 43_817_400,
+    // })
     .addLog({
         topic0: [erc721.events.Transfer.topic]
     })
