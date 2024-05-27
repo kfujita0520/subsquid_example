@@ -1,4 +1,4 @@
-import {assertNotNull} from '@subsquid/util-internal'
+import assert from 'assert'
 import {
     BlockHeader,
     DataHandlerContext,
@@ -7,41 +7,35 @@ import {
     Log as _Log,
     Transaction as _Transaction,
 } from '@subsquid/evm-processor'
-import * as erc721 from './abi/erc721';
+import * as erc721 from './abi/erc721'
+import * as erc20 from './abi/erc20'
+
+assert(erc20.events.Transfer.topic===erc721.events.Transfer.topic, 'ERC20 and ERC721 topics are expected to be the same in the TS ABI and they are not')
 
 export const processor = new EvmBatchProcessor()
-    // Lookup archive by the network name in Subsquid registry
-    // See https://docs.subsquid.io/evm-indexing/supported-networks/
     .setGateway('https://v2.archive.subsquid.io/network/polygon-mainnet')
-    // Chain RPC endpoint is required for
-    //  - indexing unfinalized blocks https://docs.subsquid.io/basics/unfinalized-blocks/
-    //  - querying the contract state https://docs.subsquid.io/evm-indexing/query-state/
     .setRpcEndpoint({
-        // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
-        // https://docs.subsquid.io/deploy-squid/env-variables/
-        url: assertNotNull(process.env.RPC_ENDPOINT),
-        // More RPC connection options at https://docs.subsquid.io/evm-indexing/configuration/initialization/#set-data-source
-        // rateLimit: 10 // the default is no limit
-        // maxBatchCallSize: 50 // default 100
+        url: 'https://rpc.ankr.com/polygon',
+        rateLimit: 50 // requests per second
     })
-    .setFinalityConfirmation(75)
+    // most networks will need a higher value here
+    // e.g. Polygon needs at least 400 blocks to finality
+    .setFinalityConfirmation(400)
     .setFields({
-        transaction: {
-            from: true,
-            value: true,
-            hash: true,
+        log: {
+            address: true,
+            data: true,
+            topics: true,
+            transactionHash: true,
         },
     })
-    .setBlockRange({
-        from: 43_817_299,
-        to: 43_817_400,
-    })
+    // .setBlockRange({
+    //     from: 43_817_299,
+    //     //to: 43_817_400,
+    // })
     .addLog({
-        topic0: [
-            erc721.events.Transfer.topic,
-            ],
-        transaction: true
-    });
+        topic0: [erc721.events.Transfer.topic]
+    })
 
 export type Fields = EvmBatchProcessorFields<typeof processor>
 export type Block = BlockHeader<Fields>
