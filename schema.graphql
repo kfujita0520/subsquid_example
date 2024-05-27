@@ -40,22 +40,10 @@ type Token @entity {
 
     holders: [TokenBalance!]! @derivedFrom(field: "token")
 
-    mints: [Mint!]! @derivedFrom(field: "token")
     transfers: [Transfer!]! @derivedFrom(field: "token")
-    burns: [Burn!]! @derivedFrom(field: "token")
 }
 
-interface Action @query {
-    id: ID!
-    blockNumber: Int!
-    timestamp: DateTime!
-    txnHash: String
-
-    contract: Contract!
-    token: Token!
-}
-
-type Transfer implements Action @entity {
+type Transfer @entity {
     id: ID!
     blockNumber: Int! @index
     timestamp: DateTime! @index
@@ -69,26 +57,4 @@ type Transfer implements Action @entity {
     amount: BigInt!
 }
 
-type Mint implements Action @entity {
-    id: ID!
-    blockNumber: Int! @index
-    timestamp: DateTime! @index
-    txnHash: String
 
-    contract: Contract!
-    token: Token!
-
-    amount: BigInt!
-}
-
-type Burn implements Action @entity {
-    id: ID!
-    blockNumber: Int! @index
-    timestamp: DateTime! @index
-    txnHash: String
-
-    contract: Contract!
-    token: Token!
-
-    amount: BigInt!
-}

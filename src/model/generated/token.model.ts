@@ -2,9 +2,7 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import {Contract} from "./contract.model"
 import {TokenStandard} from "./_tokenStandard"
 import {TokenBalance} from "./tokenBalance.model"
-import {Mint} from "./mint.model"
 import {Transfer} from "./transfer.model"
-import {Burn} from "./burn.model"
 
 @Entity_()
 export class Token {
@@ -33,12 +31,6 @@ export class Token {
     @OneToMany_(() => TokenBalance, e => e.token)
     holders!: TokenBalance[]
 
-    @OneToMany_(() => Mint, e => e.token)
-    mints!: Mint[]
-
     @OneToMany_(() => Transfer, e => e.token)
     transfers!: Transfer[]
-
-    @OneToMany_(() => Burn, e => e.token)
-    burns!: Burn[]
 }

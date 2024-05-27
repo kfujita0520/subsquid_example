@@ -5,8 +5,6 @@ import {
     Account,
     TokenStandard,
     Contract,
-    Mint,
-    Burn,
     Transfer
 } from '../model'
 import { TaskQueue } from '../utils/queue'
@@ -104,7 +102,6 @@ export function handleErc20Transfer(
         }
 
         if (fromAddress === ZERO_ADDRESS) {
-            await mctx.store.insert(new Mint(eventEntityParams))
             contract.totalSupply += amount
             await mctx.store.upsert(contract)
             token.supply += amount
@@ -126,7 +123,6 @@ export function handleErc20Transfer(
         }
 
         if (toAddress === ZERO_ADDRESS) {
-            await mctx.store.insert(new Burn(eventEntityParams))
             contract.totalSupply -= amount
             await mctx.store.upsert(contract)
             token.supply -= amount

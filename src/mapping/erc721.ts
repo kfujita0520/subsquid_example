@@ -5,8 +5,6 @@ import {
     Account,
     TokenStandard,
     Contract,
-    Mint,
-    Burn,
     Transfer
 } from '../model'
 import { TaskQueue } from '../utils/queue'
@@ -28,6 +26,7 @@ export function handleErc721Transfer(
 ) {
 
     const event = erc721.events.Transfer.decode(log)
+    console.log("event: ", event);
 
     const contractAddress = log.address
     const contractId = createContractId(contractAddress)
@@ -109,7 +108,6 @@ export function handleErc721Transfer(
             if (token.supply === 0n) {
                 mctx.log.info(`Mint of token ${index} from contract ${contractId} doesn't come from null - that breaks ERC721`)
             }
-            await mctx.store.insert(new Mint(eventEntityParams))
             contract.totalSupply += amount
             await mctx.store.upsert(contract)
             token.supply += amount
@@ -132,7 +130,6 @@ export function handleErc721Transfer(
         }
 
         if (toAddress === ZERO_ADDRESS) {
-            await mctx.store.insert(new Burn(eventEntityParams))
             contract.totalSupply -= amount
             await mctx.store.upsert(contract)
             token.supply -= amount
